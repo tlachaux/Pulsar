@@ -1,7 +1,8 @@
-Project : image-editor
-(Tested on Linux only)
+Project : image-editor 2018
+(Tested on Linux Ubuntu only)
 
-Small soft for picture manipulation using Qt library.
+Small soft for picture manipulation using Qt 5.1.
+
 Until now, it is possible to :
 - open, save image
 - apply filters (grey scale, invert color, blur, kind of Fourier transformation, image fusion)

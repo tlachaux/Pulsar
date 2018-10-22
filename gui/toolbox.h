@@ -2,8 +2,8 @@
  * Project : image-editor 2018
  */
 
-#ifndef ToolBox_H
-#define ToolBox_H
+#ifndef TOOLBOX_H
+#define TOOLBOX_H
 
 #include <QWidget>
 #include <QPushButton>
@@ -66,7 +66,7 @@ private:
     QPushButton     *mMixButton;
     QPushButton     *mFusionButton;
 
-    QString mDefaultPath;
+    QString         mDefaultPath;
 };
 
-#endif // ToolBox_H
+#endif // TOOLBOX_H

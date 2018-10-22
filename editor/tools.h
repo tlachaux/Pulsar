@@ -1,5 +1,5 @@
 /*
- * image-editor
+ * Project : image-editor 2018
  */
 
 #ifndef TOOLS_H

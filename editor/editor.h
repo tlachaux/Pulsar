@@ -1,9 +1,9 @@
 /*
- * Project : image-editor
+ * Project : image-editor 2018
  */
 
-#ifndef Editor_H
-#define Editor_H
+#ifndef EDITOR_H
+#define EDITOR_H
 
 #include <math.h>
 
@@ -55,4 +55,4 @@ signals:
 
 };
 
-#endif // Editor_H
+#endif // EDITOR_H

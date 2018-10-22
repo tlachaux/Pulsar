@@ -1,3 +1,7 @@
+/*
+ * Project : image-editor 2018
+ */
+
 #include <QColor>
 
 #include "editor.h"
@@ -68,7 +72,7 @@ void Editor::next(void)
     }
 }
 
-void Editor::updateHistory(const QImage& image)
+void Editor::updateHistory(const QImage &image)
 {
     if (mHistory.size() == 10)
     {
