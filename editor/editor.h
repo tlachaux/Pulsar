@@ -1,3 +1,7 @@
+/*
+ * Project : image-editor
+ */
+
 #ifndef Editor_H
 #define Editor_H
 
