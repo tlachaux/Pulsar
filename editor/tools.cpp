@@ -1,3 +1,7 @@
+/*
+ * image-editor
+ */
+
 #include "tools.h"
 
 int absolute(int value)
