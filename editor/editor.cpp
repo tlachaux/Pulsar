@@ -2,19 +2,17 @@
  * Project : image-editor 2018
  */
 
+#include <math.h>
+
 #include <QColor>
 
 #include "editor.h"
 #include "tools.h"
 
-
-
-#include <math.h>
-
 Editor::Editor() :
     mSource(QSize(1000, 1000), QImage::Format_RGB888),
     mResult(QSize(1000, 1000), QImage::Format_RGB888),
-    mMixer(nullptr),
+    mMixer(),
     mSaveCounter(0),
     mHistoryIndex(0)
 {
