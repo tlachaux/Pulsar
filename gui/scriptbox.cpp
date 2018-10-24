@@ -1,3 +1,7 @@
+/*
+ * Project : Pulsar 2018 - Image Processing
+ */
+
 #include "scriptbox.h"
 
 ScriptBox::ScriptBox(QWidget *parent) : QDialog(parent)

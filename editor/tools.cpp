@@ -1,5 +1,5 @@
 /*
- * Project : image-editor 2018
+ * Project : Pulsar 2018 - Image Processing
  */
 
 #include "tools.h"

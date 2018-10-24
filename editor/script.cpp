@@ -1,3 +1,7 @@
+/*
+ * Project : Pulsar 2018 - Image Processing
+ */
+
 #include <QColor>
 
 #include "script.h"

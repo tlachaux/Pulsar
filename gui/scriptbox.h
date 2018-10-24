@@ -1,3 +1,7 @@
+/*
+ * Project : Pulsar 2018 - Image Processing
+ */
+
 #ifndef SCRIPTBOX_H
 #define SCRIPTBOX_H
 

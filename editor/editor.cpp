@@ -1,9 +1,10 @@
 /*
- * Project : image-editor 2018
+ * Project : Pulsar 2018 - Image Processing
  */
 
 #include <math.h>
 
+#include <QCoreApplication>
 #include <QColor>
 
 #include "editor.h"
@@ -126,6 +127,8 @@ void Editor::apply(Filter filter)
         }
         float p = (((float) y) / (float) mSource.size().height()) * 100;
         emit sProgress((uint) p);
+
+        QCoreApplication::processEvents();
     }
     updateHistory(mResult);
     mSource = mResult;
