@@ -20,18 +20,19 @@ class Editor : public QObject
 public:
     Editor();
 
-    void apply(Filter filter);
-
+public slots:
     void loadSource(const QString &path);
-    void loadMixer(const QString &path);
+    void loadMixer(const QString &path, Filter filter);
     void saveResult(const QString &path);
 
     void previous(void);
     void next(void);
     void updateHistory(const QImage& image);
 
+    void apply(Filter filter);
+    void applyScript(const QString& sources);
+
     const QImage&   result(void);
-    QSize           resultSize(void);
 
     QRgb invert(int x, int y);
     QRgb blur(int x, int y);
@@ -48,10 +49,11 @@ private:
     QVector<QImage> mHistory;
 
     uint mSaveCounter;
-    int mHistoryIndex;
+    int  mHistoryIndex;
 
 signals:
-    void giveProgress(uint p);
+    void sProgress(uint progress);
+    void sRefresh(const QImage& image);
 
 };
 

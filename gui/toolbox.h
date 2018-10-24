@@ -12,6 +12,8 @@
 #include <QProgressBar>
 #include <QSlider>
 
+#include "scriptbox.h"
+
 #include "editor/editor.h"
 
 class ToolBox : public QFrame
@@ -21,25 +23,32 @@ public:
     explicit ToolBox(QWidget *parent = nullptr);
 
 public slots:
-    void getOpenPath(void);
-    void getSavePath(void);
-    void getMixPath(void);
-    void getFusionPath(void);
-
-    void propagatePrevious(void);
-    void propagateNext(void);
-    void propagateInvert(void);
-    void propagateBlur(void);
-    void propagateGrey(void);
-    void propagateBorder(void);
-
-signals:
-    void open(QString path);
-    void save(QString path);
+    void open(void);
+    void save(void);
     void previous(void);
     void next(void);
-    void transform(Filter filter);
-    void mix(const QString &path, Filter filter);
+
+    void script(void);
+
+    void invert(void);
+    void grey(void);
+
+    void blur(void);
+    void border(void);
+
+    void mix(void);
+    void fusion(void);
+
+signals:
+    void sOpen(QString path);
+    void sSave(QString path);
+    void sPrevious(void);
+    void sNext(void);
+
+    void sScript(void);
+
+    void sApply(Filter filter);
+    void sMix(const QString &path, Filter filter);
 
 private:
     QVBoxLayout     *mLayout;
@@ -60,6 +69,7 @@ private:
     QVBoxLayout     *mFilterLayout;
     QPushButton     *mBlurButton;
     QPushButton     *mBorderButton;
+    QPushButton     *mCustomButton;
 
     QFrame          *mMixFrame;
     QVBoxLayout     *mMixLayout;

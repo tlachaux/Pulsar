@@ -8,14 +8,18 @@
 #include <QLabel>
 #include <QWidget>
 #include <QMouseEvent>
+#include <QImage>
 
 class Workshop : public QLabel
 {
     Q_OBJECT
 
 public:
-    explicit Workshop(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit Workshop(QWidget* parent = nullptr);
     ~Workshop();
+
+public slots:
+    void display(const QImage& image);
 
 signals:
     void clicked(const QPointF &mouse);

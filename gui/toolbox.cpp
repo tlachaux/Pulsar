@@ -16,6 +16,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent), mDefaultPath("/home")
     mGreyButton     = new QPushButton("Grey scale");
     mBlurButton     = new QPushButton("Blur");
     mBorderButton   = new QPushButton("Border only");
+    mCustomButton   = new QPushButton("Custom filter");
     mFusionButton   = new QPushButton("Fade fusion");
     mMixButton      = new QPushButton("Alternate fusion");
 
@@ -51,6 +52,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent), mDefaultPath("/home")
 
     mFilterLayout->addWidget(mBlurButton);
     mFilterLayout->addWidget(mBorderButton);
+    mFilterLayout->addWidget(mCustomButton);
 
     mFilterFrame->setLayout(mFilterLayout);
     mFilterFrame->setFrameStyle(6);
@@ -72,91 +74,99 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent), mDefaultPath("/home")
     this->setLayout(mLayout);
     this->setFixedWidth(200);
 
-    connect(mLoadButton, &QPushButton::clicked, this, &ToolBox::getOpenPath);
-    connect(mSaveButton, &QPushButton::clicked, this, &ToolBox::getSavePath);
-    connect(mPreviousButton, &QPushButton::clicked, this, &ToolBox::propagatePrevious);
-    connect(mNextButton, &QPushButton::clicked, this, &ToolBox::propagateNext);
+    connect(mLoadButton,        &QPushButton::clicked, this, &ToolBox::open);
+    connect(mSaveButton,        &QPushButton::clicked, this, &ToolBox::save);
+    connect(mPreviousButton,    &QPushButton::clicked, this, &ToolBox::previous);
+    connect(mNextButton,        &QPushButton::clicked, this, &ToolBox::next);
 
-    connect(mInvertButton, &QPushButton::clicked, this, &ToolBox::propagateInvert);
-    connect(mBlurButton, &QPushButton::clicked, this, &ToolBox::propagateBlur);
-    connect(mGreyButton, &QPushButton::clicked, this, &ToolBox::propagateGrey);
-    connect(mBorderButton, &QPushButton::clicked, this, &ToolBox::propagateBorder);
-    connect(mFusionButton, &QPushButton::clicked, this, &ToolBox::getFusionPath);
-    connect(mMixButton, &QPushButton::clicked, this, &ToolBox::getMixPath);
+    connect(mCustomButton,      &QPushButton::clicked, this, &ToolBox::script);
+
+    connect(mInvertButton,      &QPushButton::clicked, this, &ToolBox::invert);
+    connect(mGreyButton,        &QPushButton::clicked, this, &ToolBox::grey);
+
+    connect(mBlurButton,        &QPushButton::clicked, this, &ToolBox::blur);
+    connect(mBorderButton,      &QPushButton::clicked, this, &ToolBox::border);
+
+    connect(mFusionButton,      &QPushButton::clicked, this, &ToolBox::fusion);
+    connect(mMixButton,         &QPushButton::clicked, this, &ToolBox::mix);
 }
 
-void ToolBox::getOpenPath(void)
+void ToolBox::open(void)
 {
     QString path = QFileDialog::getOpenFileName(this, tr("Open File"), mDefaultPath, tr("Images (*.png *.xpm *.jpg *.jpeg)"));
 
     if (path != "")
     {
         mDefaultPath = path;
-        emit open(path);
+        emit sOpen(path);
 
     }
 }
 
-void ToolBox::getSavePath(void)
+void ToolBox::save(void)
 {
     QString path = QFileDialog::getExistingDirectory(this, tr("Open File"), mDefaultPath);
 
     if (path != "" && path != nullptr)
     {
         mDefaultPath = path;
-        emit save(path);
+        emit sSave(path);
     }
 }
 
-void ToolBox::propagatePrevious(void)
+void ToolBox::previous(void)
 {
-    emit previous();
+    emit sPrevious();
 }
 
-void ToolBox::propagateNext(void)
+void ToolBox::next(void)
 {
-    emit next();
+    emit sNext();
 }
 
-void ToolBox::propagateInvert(void)
+void ToolBox::script(void)
 {
-    emit transform(Filter::Invert);
+    emit sScript();
 }
 
-void ToolBox::propagateBlur(void)
+void ToolBox::invert(void)
 {
-    emit transform(Filter::Blur);
+    emit sApply(Filter::Invert);
 }
 
-void ToolBox::propagateGrey(void)
+void ToolBox::grey(void)
 {
-    emit transform(Filter::Grey);
+    emit sApply(Filter::Grey);
 }
 
-void ToolBox::propagateBorder(void)
+void ToolBox::blur(void)
 {
-    emit transform(Filter::Border);
+    emit sApply(Filter::Blur);
 }
 
-void ToolBox::getFusionPath(void)
+void ToolBox::border(void)
+{
+    emit sApply(Filter::Border);
+}
+
+void ToolBox::fusion(void)
 {
     QString path = QFileDialog::getOpenFileName(this, tr("Open File"), mDefaultPath, tr("Images (*.png *.xpm *.jpg *.jpeg)"));
 
     if (path != "")
     {
         mDefaultPath = path;
-        emit mix(path, Filter::Fusion);
+        emit sMix(path, Filter::Fusion);
     }
 }
 
-
-void ToolBox::getMixPath(void)
+void ToolBox::mix(void)
 {
     QString path = QFileDialog::getOpenFileName(this, tr("Open File"), mDefaultPath, tr("Images (*.png *.xpm *.jpg *.jpeg)"));
 
     if (path != "")
     {
         mDefaultPath = path;
-        emit mix(path, Filter::Mix);
+        emit sMix(path, Filter::Mix);
     }
 }

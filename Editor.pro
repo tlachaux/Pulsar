@@ -28,12 +28,16 @@ SOURCES += \
         gui/mainwindow.cpp \
         gui/workshop.cpp \
         gui/toolbox.cpp \
+        gui/scriptbox.cpp \
         editor/editor.cpp \
         editor/tools.cpp \
+    editor/script.cpp
 
 HEADERS += \
         gui/mainwindow.h \
         gui/workshop.h \
         gui/toolbox.h \
+        gui/scriptbox.h \
         editor/editor.h \
         editor/tools.h \
+    editor/script.h

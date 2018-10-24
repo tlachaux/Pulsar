@@ -7,6 +7,7 @@
 #include <QColor>
 
 #include "editor.h"
+#include "script.h"
 #include "tools.h"
 
 Editor::Editor() :
@@ -29,13 +30,16 @@ void Editor::loadSource(const QString &path)
         mResult = mSource;
         updateHistory(mSource);
     }
+
+    emit sRefresh(mResult);
 }
 
-void Editor::loadMixer(const QString &path)
+void Editor::loadMixer(const QString &path, Filter filter)
 {
     if (path != "")
     {
         mMixer.load(path);
+        apply(filter);
     }
 }
 
@@ -59,6 +63,8 @@ void Editor::previous(void)
         mSource = mHistory[--mHistoryIndex];
         mResult = mSource;
     }
+
+    emit sRefresh(mResult);
 }
 
 void Editor::next(void)
@@ -68,6 +74,8 @@ void Editor::next(void)
         mSource = mHistory[++mHistoryIndex];
         mResult = mSource;
     }
+
+    emit sRefresh(mResult);
 }
 
 void Editor::updateHistory(const QImage &image)
@@ -83,11 +91,6 @@ void Editor::updateHistory(const QImage &image)
 const QImage& Editor::result(void)
 {
     return mResult;
-}
-
-QSize Editor::resultSize(void)
-{
-    return mResult.size();
 }
 
 void Editor::apply(Filter filter)
@@ -121,19 +124,27 @@ void Editor::apply(Filter filter)
             }
            mResult.setPixel(x, y, rgb);
         }
-        float progress = (((float) y) / (float) mSource.size().height()) * 100;
-        emit giveProgress((uint) progress);
+        float p = (((float) y) / (float) mSource.size().height()) * 100;
+        emit sProgress((uint) p);
     }
     updateHistory(mResult);
     mSource = mResult;
-    emit giveProgress(0);
+
+    emit sProgress(0);
+    emit sRefresh(mResult);
+}
+
+void Editor::applyScript(const QString& sources)
+{
+    Script s = Script(sources);
+
 }
 
 QRgb Editor::invert(int x, int y)
 {
-        QRgb rgb = mSource.pixel(x, y);
-        QColor color(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb));
-        return color.rgb();
+    QRgb rgb = mSource.pixel(x, y);
+    QColor color(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb));
+    return color.rgb();
 }
 
 QRgb Editor::blur(int x, int y)

@@ -9,6 +9,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    this->setWindowTitle("Pulsar");
     mWidget = new QWidget(this);
 
     this->setCentralWidget(mWidget);
@@ -23,84 +24,32 @@ MainWindow::MainWindow(QWidget *parent)
     mToolBox        = new ToolBox();
     mProgressBar    = new QProgressBar();
 
-    mWorkshop->setMinimumSize(QSize(900, 900));
-
+    mWorkshop->display(mEditor.result());
     mProgressBar->setMaximum(100);
 
-    mSaveCounter = 0;
-
-    this->displayImage();
-
-    mLayout->addWidget(mWorkshop, 0, 0);
+    mLayout->addWidget(mWorkshop, 0, 0, 1, 1);
     mLayout->addWidget(mToolBox, 0, 1, 2, 1);
     mLayout->addWidget(mProgressBar, 1, 0, 1, 1);
     mLayout->setAlignment(mWorkshop, Qt::AlignCenter);
     mWidget->setLayout(mLayout);
 
-    connect(mToolBox, &ToolBox::open, this, &MainWindow::loadImage);
-    connect(mToolBox, &ToolBox::save, this, &MainWindow::saveImage);
-    connect(mToolBox, &ToolBox::previous, this, &MainWindow::previous);
-    connect(mToolBox, &ToolBox::next, this, &MainWindow::next);
+    mScriptBox = new ScriptBox(this);
 
-    connect(mToolBox, &ToolBox::transform, this, &MainWindow::transform);
+    connect(mToolBox, &ToolBox::sOpen,      &mEditor,       &Editor::loadSource);
+    connect(mToolBox, &ToolBox::sSave,      &mEditor,       &Editor::saveResult);
+    connect(mToolBox, &ToolBox::sPrevious,  &mEditor,       &Editor::previous);
+    connect(mToolBox, &ToolBox::sNext,      &mEditor,       &Editor::next);
+    connect(mToolBox, &ToolBox::sApply,     &mEditor,       &Editor::apply);
+    connect(mToolBox, &ToolBox::sMix,       &mEditor,       &Editor::loadMixer);
 
-    connect(mToolBox, &ToolBox::mix, this, &MainWindow::mix);
+    connect(mToolBox,   &ToolBox::sScript,  mScriptBox,     &ScriptBox::run);
+    connect(mScriptBox, &ScriptBox::sApply, &mEditor,       &Editor::applyScript);
 
-    connect(&mEditor, &Editor::giveProgress, mProgressBar, &QProgressBar::setValue);
+    connect(&mEditor, &Editor::sRefresh,    mWorkshop,      &Workshop::display);
+    connect(&mEditor, &Editor::sProgress,   mProgressBar,   &QProgressBar::setValue);
 }
 
 MainWindow::~MainWindow()
 {
 
-}
-
-void MainWindow::displayImage(void)
-{
-    QSize imageSize = mEditor.resultSize();
-
-    if (imageSize.width() > 1800) {
-        imageSize.setWidth(1600);
-    }
-    if (imageSize.height() > 900) {
-        imageSize.setHeight(900);
-    }
-
-    mWorkshop->setMinimumSize(imageSize);
-    mWorkshop->setPixmap(QPixmap::fromImage(mEditor.result()));
-}
-
-void MainWindow::loadImage(const QString &path)
-{
-    mEditor.loadSource(path);
-    displayImage();
-}
-
-void MainWindow::saveImage(const QString &path)
-{
-    mEditor.saveResult(path);
-}
-
-void MainWindow::previous(void)
-{
-    mEditor.previous();
-    displayImage();
-}
-
-void MainWindow::next(void)
-{
-    mEditor.next();
-    displayImage();
-}
-
-void MainWindow::transform(Filter filter)
-{
-    mEditor.apply(filter);
-    displayImage();
-}
-
-void MainWindow::mix(const QString &path, Filter filter)
-{
-    mEditor.loadMixer(path);
-    mEditor.apply(filter);
-    displayImage();
 }

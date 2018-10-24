@@ -7,8 +7,9 @@
 
 #include<QVector>
 
-int absolute(int value);
-int max(const QVector<int> &vector);
-bool in(int value, int min, int max);
+int     absolute(int value);
+int     max(const QVector<int> &vector);
+bool    in(int value, int min, int max);
+bool    isDouble(const QString& str);
 
 #endif // TOOLS_H

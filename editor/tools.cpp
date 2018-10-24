@@ -28,3 +28,20 @@ bool in(int value, int min, int max)
 {
     return (value >= min && value <= max);
 }
+
+bool isDouble(const QString& str)
+{
+    if (str[0] == '.' || str[str.size()] == '.')
+    {
+        return false;
+    }
+
+    for (int i=0; i < str.size(); ++i)
+    {
+        if ((str[i] < '0' || str[i] > '9') && str[i] != '.') {
+            return false;
+        }
+    }
+
+    return true;
+}
