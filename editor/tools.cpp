@@ -31,7 +31,7 @@ bool in(int value, int min, int max)
 
 bool isDouble(const QString& str)
 {
-    if (str[0] == '.' || str[str.size()] == '.')
+    if (str[0] == '.' || str[str.size() - 1] == '.')
     {
         return false;
     }
