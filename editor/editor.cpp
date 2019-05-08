@@ -89,6 +89,25 @@ void Editor::updateHistory(const QImage &image)
     mHistory.push_back(image);
 }
 
+Editor::Modifier Editor::selectModifier(Filter filter) const
+{
+    switch(filter)
+    {
+        case Filter::Invert:
+            return &Editor::invert;
+        case Filter::Blur:
+            return &Editor::blur;
+        case Filter::Border:
+            return &Editor::border;
+        case Filter::Fusion:
+            return &Editor::fusion;
+        case Filter::Mix:
+            return &Editor::mix;
+        case Filter::Grey:
+            return &Editor::grey;
+    }
+}
+
 const QImage& Editor::result(void)
 {
     return mResult;
@@ -96,37 +115,16 @@ const QImage& Editor::result(void)
 
 void Editor::apply(Filter filter)
 {
-    QRgb rgb;
+    Modifier modifier = selectModifier(filter);
 
     for (int y=0; y < mSource.size().height(); ++y)
     {
         for (int x=0; x < mSource.size().width(); ++x)
         {
-            switch(filter)
-            {
-                case Filter::Invert:
-                    rgb = invert(x, y);
-                    break;
-                case Filter::Blur:
-                    rgb = blur(x, y);
-                    break;
-                case Filter::Border:
-                    rgb = border(x, y);
-                    break;
-                case Filter::Fusion:
-                    rgb = fusion(x, y);
-                    break;
-                case Filter::Mix:
-                    rgb = mix(x, y);
-                    break;
-                case Filter::Grey:
-                    rgb = grey(x, y);
-                    break;
-            }
-           mResult.setPixel(x, y, rgb);
+           mResult.setPixel(x, y, (this->*modifier)(x, y));
         }
-        float p = (((float) y) / (float) mSource.size().height()) * 100;
-        emit sProgress((uint) p);
+        float p = ((float(y)) / float(mSource.size().height()) * 100);
+        emit sProgress(uint(p));
 
         QCoreApplication::processEvents();
     }
@@ -143,14 +141,14 @@ void Editor::applyScript(const QString& sources)
 
 }
 
-QRgb Editor::invert(int x, int y)
+QRgb Editor::invert(int x, int y) const
 {
     QRgb rgb = mSource.pixel(x, y);
     QColor color(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb));
     return color.rgb();
 }
 
-QRgb Editor::blur(int x, int y)
+QRgb Editor::blur(int x, int y) const
 {
     int total = 1;
     int r = 0;
@@ -186,7 +184,7 @@ QRgb Editor::blur(int x, int y)
     return color.rgb();
 }
 
-QRgb Editor::grey(int x, int y)
+QRgb Editor::grey(int x, int y) const
 {
     QRgb rgb = mSource.pixel(x, y);
 
@@ -196,7 +194,7 @@ QRgb Editor::grey(int x, int y)
     return color.rgb();
 }
 
-QRgb Editor::border(int x, int y)
+QRgb Editor::border(int x, int y) const
 {
     QRgb rgb1 = mSource.pixel(x, y);
     QVector<int> gaps;
@@ -228,7 +226,7 @@ QRgb Editor::border(int x, int y)
     return color.rgb();
 }
 
-QRgb Editor::mix(int x, int y)
+QRgb Editor::mix(int x, int y) const
 {
     if (x % 2 == 0 && y % 2 == 0 && x < mMixer.size().width() && y < mMixer.size().height())
     {
@@ -240,7 +238,7 @@ QRgb Editor::mix(int x, int y)
     }
 }
 
-QRgb Editor::fusion(int x, int y)
+QRgb Editor::fusion(int x, int y) const
 {
     QRgb rgb1 = mSource.pixel(x, y);
 

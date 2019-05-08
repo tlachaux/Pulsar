@@ -11,11 +11,14 @@
 #include <QVector>
 #include <QImage>
 
+
 enum Filter {Invert, Blur, Grey, Border, Fusion, Mix};
 
 class Editor : public QObject
 {
     Q_OBJECT
+
+    typedef QRgb (Editor::*Modifier)(int x, int y) const;
 
 public:
     Editor();
@@ -27,21 +30,25 @@ public slots:
 
     void previous(void);
     void next(void);
-    void updateHistory(const QImage& image);
 
     void apply(Filter filter);
     void applyScript(const QString& sources);
 
     const QImage&   result(void);
 
-    QRgb invert(int x, int y);
-    QRgb blur(int x, int y);
-    QRgb grey(int x, int y);
-    QRgb border(int x, int y);
-    QRgb fusion(int x, int y);
-    QRgb mix(int x, int y);
 
 private:
+    void updateHistory(const QImage& image);
+
+    Modifier selectModifier(Filter filter) const;
+
+    QRgb invert(int x, int y)   const;
+    QRgb blur(int x, int y)     const;
+    QRgb grey(int x, int y)     const;
+    QRgb border(int x, int y)   const;
+    QRgb fusion(int x, int y)   const;
+    QRgb mix(int x, int y)      const;
+
     QImage mSource;
     QImage mResult;
     QImage mMixer;

@@ -99,7 +99,6 @@ void ToolBox::open(void)
     {
         mDefaultPath = path;
         emit sOpen(path);
-
     }
 }
 

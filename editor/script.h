@@ -12,9 +12,9 @@ typedef double (*Function)(double, double);
 
 struct Instruction
 {
-    int        first;
-    int        second;
-    int        result;
+    int         first;
+    int         second;
+    int         result;
     Function    function;
 };
 
@@ -27,8 +27,8 @@ public:
 private:
     void parse(const QString& sources, int index);
 
-    QVector<double>         variables;
-    QVector<Instruction>    instructions;
+    QVector<double>         mVariables;
+    QVector<Instruction>    mInstructions;
 };
 
 #endif // SCRIPT_H

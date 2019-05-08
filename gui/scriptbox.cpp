@@ -11,7 +11,7 @@ ScriptBox::ScriptBox(QWidget *parent) : QDialog(parent)
     mLayout         = new QGridLayout();
     mTextEdit       = new QTextEdit();
     mCancelButton   = new QPushButton("Cancel");
-    mApplyButton      = new QPushButton("Apply");
+    mApplyButton    = new QPushButton("Apply");
 
     mTextEdit->setMinimumSize(QSize(500, 500));
 
